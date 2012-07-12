@@ -14,7 +14,8 @@ var Argo = Argo || {};
   // A view for stylable GeoJson layers
   A.LayerView = Backbone.View.extend({
     initialize: function(){
-      var self = this;
+      var self = this,
+          callback = 'ArgoJsonpCallback_' + $.expando + '_' + $.now();
 
       // Init the layer for this view
       self.layer = new L.GeoJSON(null, {
@@ -44,9 +45,9 @@ var Argo = Argo || {};
       // Fetch the GeoJson from GeoServer
       // TODO: make this not dependent on GeoServer
       $.ajax({
-        url: self.model.get('url') + '&format_options=callback:ArgoJsonpCallback',
+        url: self.model.get('url') + '&format_options=callback:' + callback,
         dataType: 'jsonp',
-        jsonpCallback: 'ArgoJsonpCallback',
+        jsonpCallback: callback,
         success: function(geoJson) {
           self.layer.addGeoJSON(geoJson);
         }
@@ -59,12 +60,13 @@ var Argo = Argo || {};
     getStyleRule: function(properties) {
       var self = this, 
           rules = self.model.get('rules'),
+          propertyRe = /\{\{property\}\}/g,
           i, condition;
 
       for (i=0; i<rules.length; i++) {
         // Replace the template with the property variable, not the value.
         // this is so we don't have to worry about strings vs nums.
-        condition = rules[i].condition.replace('{{property}}', 'properties[self.model.get("property")]');
+        condition = rules[i].condition.replace(propertyRe, 'properties[self.model.get("property")]');
 
         // Simpler code plus a trusted source; negligible performance hit
         if (eval(condition)) {
@@ -116,7 +118,7 @@ var Argo = Argo || {};
         self.collection.add(layerModel);
       }
 
-      window.legendView = new A.LegendView({
+      var legendView = new A.LegendView({
         collection: self.collection
       });
     }
