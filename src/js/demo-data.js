@@ -66,6 +66,46 @@ Argo.demoOptions = {
           style: {color: '#65c165', weight: 4, opacity: 0.9}
         }
       ]  
+    },
+    {
+      id: 'vendors',
+      url: 'http://gsdemo.dev.openplans.org/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=jackson_heights:vendors&srsName=EPSG:4326&outputFormat=json',
+      title: 'Street vendors',
+      description: 'Locations of street vendors were surveyed on several weekdays and weekends in Fall 2009.',
+      visible: true,
+      rules: [
+        {
+          condition: 'true',
+          style: {color: '#444444', radius: 1, opacity: 0.9}
+        }
+      ]  
+    },
+    {
+      id: 'crashes',
+      url: 'http://gsdemo.dev.openplans.org/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=jackson_heights:Ped_Crashes&srsName=EPSG:4326&outputFormat=json',
+      property: 'ICOUNT',
+      title: 'Crashes',
+      description: 'Reported pedestrian and bicycle crashes within the study area between January 2005 and December 2007. Zoom in to see the number of crashes at each location.',
+      popupContent: '{{value}} crashes',
+      visible: true,
+      rules: [
+        {
+          condition: '{{property}} > 0 && {{property}} < 2',
+          style: {color: '#973100', radius: 6, opacity: 0.9, fillOpacity: 0.2}
+        }, 
+        {
+          condition: '{{property}} >= 2 && {{property}} < 4',
+          style: {color: '#973100', radius: 12, opacity: 0.9, fillOpacity: 0.2}
+        }, 
+        {
+          condition: '{{property}} >= 4 && {{property}} < 6',
+          style: {color: '#973100', radius: 18, opacity: 0.9, fillOpacity: 0.2}
+        }, 
+        {
+          condition: '{{property}} >= 6',
+          style: {color: '#973100', radius: 24, opacity: 0.9, fillOpacity: 0.2}
+        }
+      ]  
     }
   ]
 };

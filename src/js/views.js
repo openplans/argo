@@ -34,6 +34,11 @@ var Argo = Argo || {};
 
         // Set the style
         evt.layer.setStyle(style);
+        // Handle radius for CircleMarkers
+        if (evt.layer.setRadius && style.radius) {
+          evt.layer.setRadius(style.radius);
+        }
+
         // Init the popup
         if (popupContent) {
           evt.layer.bindPopup(popupContent);
