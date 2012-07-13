@@ -1,4 +1,89 @@
-#map {
+p {
+  margin:0.4em 0;
+}
+
+#argo-container {
+  width: 600px;
+  position: relative;
+}
+
+#argo-map {
   width: 600px;
   height: 400px;
+}
+
+#argo-legend {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 150px;
+
+  border: 1px solid #0A9F67;
+  color: #444;
+  background-color: #fff;
+}
+
+.argo-legend-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.argo-legend-item {
+  position: relative;
+
+  padding:3px;
+  border-bottom:1px solid #999;
+}
+
+.argo-legend-item:last-child {
+  border:none;
+}
+
+.argo-legend-title label, .argo-legend-title input {
+  cursor: pointer;
+}
+
+.argo-legend-desc {
+  display: none;
+
+  position: absolute;
+  top: -5px;
+  right:160px;
+  min-width: 300px;
+
+  padding:3px;
+  border: 1px solid #0A9F67;
+  color: #444;
+  background-color: #fff;
+}
+
+.argo-legend-desc-title:before {
+  content:"\0020";
+  position: absolute;
+  height:14px;
+  width:14px;
+  display: block;
+  border-right: 1px solid #0A9F67;
+  border-top: 1px solid #0A9F67;
+  background-color: #fff;
+  right:-8px;
+  top: 10px;
+
+  transform: rotate(45deg);
+  -ms-transform: rotate(45deg); /* IE 9 */
+  -webkit-transform: rotate(45deg); /* Safari and Chrome */
+  -o-transform: rotate(45deg); /* Opera */
+  -moz-transform: rotate(45deg); /* Firefox */
+}
+
+
+.argo-legend-desc-title {
+  font-weight: bold;
+  border-bottom:1px solid #999;
+  margin-right: 20px
+}
+
+.argo-legend-item:hover .argo-legend-desc {
+  display: block;
 }

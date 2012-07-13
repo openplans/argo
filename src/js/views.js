@@ -6,8 +6,36 @@ var Argo = Argo || {};
     initialize: function(){
       this.render();
     },
+    events: {
+      'change .argo-legend-checkbox': 'toggleVisibility'
+    },
     render: function(){
-      console.log('render LegendView with: ', this.collection.toJSON());
+      var $markup = $('<ul class="argo-legend-list"></ul>');
+
+      this.collection.each(function(model, i) {
+        $markup.append('<li class="argo-legend-item">' +
+          '<div class="argo-legend-desc">' +
+            '<div class="argo-legend-desc-title">'+model.get('title')+'</div>' +
+            '<div class="argo-legend-desc-content">'+model.get('description')+'</div>' +
+          '</div>' +
+          '<div class="argo-legend-title">' +
+            '<input id="argo-'+model.get('id')+'" data-layerid="'+model.get('id')+'" class="argo-legend-checkbox" type="checkbox"></input>' +
+            '<label for="argo-'+model.get('id')+'">'+model.get('title')+'</label>' +
+          '</div>' +
+        '</li>');
+      });
+
+      this.$el.append($markup);
+    },
+    toggleVisibility: function(evt) {
+      var $cbox = $(evt.target),
+          id = $cbox.attr('data-layerid');
+
+      if ($cbox.is(':checked')) {
+        this.collection.get(id).set('visible', true);
+      } else {
+        this.collection.get(id).set('visible', false);
+      }
     }
   });
 
@@ -29,7 +57,7 @@ var Argo = Argo || {};
         var style = self.getStyleRule(evt.properties),
             popupContent = self.getPopupContent(evt.properties);
 
-        // Only clickable if there is popup content
+        // Only clickable if there is popup content; convert to bool
         style.clickable = !!popupContent;
 
         // Set the style
@@ -63,7 +91,7 @@ var Argo = Argo || {};
     },
     // Get the style rule for this feature by evaluating the condition option
     getStyleRule: function(properties) {
-      var self = this, 
+      var self = this,
           rules = self.model.get('rules'),
           propertyRe = /\{\{property\}\}/g,
           i, condition;
@@ -114,7 +142,7 @@ var Argo = Argo || {};
 
       for (i = 0; i < self.options.layers.length; i++) {
         layerModel = new Backbone.Model(self.options.layers[i]);
-        
+
         new A.LayerView({
           map: self.map,
           model: layerModel
@@ -124,6 +152,7 @@ var Argo = Argo || {};
       }
 
       var legendView = new A.LegendView({
+        el: '#argo-legend',
         collection: self.collection
       });
     }
