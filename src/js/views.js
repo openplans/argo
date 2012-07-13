@@ -42,8 +42,7 @@ var Argo = Argo || {};
   // A view for stylable GeoJson layers
   A.LayerView = Backbone.View.extend({
     initialize: function(){
-      var self = this,
-          callback = 'ArgoJsonpCallback_' + $.expando + '_' + $.now();
+      var self = this;
 
       // Init the layer for this view
       self.layer = new L.GeoJSON(null, {
@@ -62,6 +61,8 @@ var Argo = Argo || {};
 
         // Set the style
         evt.layer.setStyle(style);
+        // Cache the properties, for testing
+        evt.layer.setStyle({properties: evt.properties});
         // Handle radius for CircleMarkers
         if (evt.layer.setRadius && style.radius) {
           evt.layer.setRadius(style.radius);
@@ -75,19 +76,25 @@ var Argo = Argo || {};
         self.render();
       });
 
-      // Fetch the GeoJson from GeoServer
-      // TODO: make this not dependent on GeoServer
-      $.ajax({
-        url: self.model.get('url') + '&format_options=callback:' + callback,
-        dataType: 'jsonp',
-        jsonpCallback: callback,
-        success: function(geoJson) {
+      self.getGeoJson(self.model.get('url'), function(geoJson) {
+        if (geoJson) {
           self.layer.addGeoJSON(geoJson);
         }
       });
 
       // Rerender on model change
       self.model.bind('change', self.render, self);
+    },
+    getGeoJson: function(url, callback) {
+      var callbackName = 'ArgoJsonpCallback_' + $.expando + '_' + $.now();
+      // Fetch the GeoJson from GeoServer
+      // TODO: make this not dependent on GeoServer
+      $.ajax({
+        url: url + '&format_options=callback:' + callbackName,
+        dataType: 'jsonp',
+        jsonpCallback: callbackName,
+        success: callback
+      });
     },
     // Get the style rule for this feature by evaluating the condition option
     getStyleRule: function(properties) {
@@ -137,8 +144,11 @@ var Argo = Argo || {};
       self.map.addLayer(baseTile);
       self.map.setView(new L.LatLng(self.options.lat, self.options.lng), self.options.zoom);
 
+      // Cache the layers views
+      self.layers = {};
+
       this.collection.each(function(model, i) {
-        new A.LayerView({
+        self.layers[model.get('id')] = new A.LayerView({
           map: self.map,
           model: model
         });
