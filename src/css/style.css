@@ -1,3 +1,8 @@
+body {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 11px
+}
+
 p {
   margin:0.4em 0;
 }
@@ -80,8 +85,11 @@ p {
 
 .argo-legend-desc-title {
   font-weight: bold;
+  font-size:1.1em;
   border-bottom:1px solid #999;
-  margin-right: 20px
+  margin-right: 20px;
+  padding: 0.2em 0;
+
 }
 
 .argo-legend-item:hover .argo-legend-desc {
