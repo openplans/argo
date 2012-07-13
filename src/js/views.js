@@ -132,28 +132,16 @@ var Argo = Argo || {};
           baseTileAttribution = 'Map data &copy; OpenStreetMap contributors, CC-BY-SA <a href="http://mapbox.com/about/maps" target="_blank">Mapbox Terms &amp; Feedback</a>',
           baseTile = new L.TileLayer(baseTileUrl, {maxZoom: 18, attribution: baseTileAttribution});
 
-      // Generic collection for layers
-      self.collection = new Backbone.Collection();
-
       // Init the map
       self.map = new L.Map(self.el);
       self.map.addLayer(baseTile);
       self.map.setView(new L.LatLng(self.options.lat, self.options.lng), self.options.zoom);
 
-      for (i = 0; i < self.options.layers.length; i++) {
-        layerModel = new Backbone.Model(self.options.layers[i]);
-
+      this.collection.each(function(model, i) {
         new A.LayerView({
           map: self.map,
-          model: layerModel
+          model: model
         });
-
-        self.collection.add(layerModel);
-      }
-
-      var legendView = new A.LegendView({
-        el: '#argo-legend',
-        collection: self.collection
       });
     }
   });
