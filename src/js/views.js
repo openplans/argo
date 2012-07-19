@@ -121,6 +121,7 @@ var Argo = Argo || {};
     },
     render: function(){
       // Adds or removes the layer based on visibility
+      this.options.map.closePopup();
       if (this.model.get('visible') && !this.options.map.hasLayer(this.layer)) {
         this.options.map.addLayer(this.layer);
       }
