@@ -42,43 +42,40 @@ var Argo = Argo || {};
   // A view for stylable GeoJson layers
   A.LayerView = Backbone.View.extend({
     initialize: function(){
-      var self = this;
+      var self = this,
+          url = self.model.get('url');
 
-      // Init the layer for this view
-      self.layer = new L.GeoJSON(null, {
-        pointToLayer: function (latlng){
-          return new L.CircleMarker(latlng);
-        }
-      });
-
-      // Set style and popup content based on the feature properties
-      self.layer.on("featureparse", function (evt) {
-        var style = self.getStyleRule(evt.properties),
-            popupContent = self.getPopupContent(evt.properties);
-
-        // Only clickable if there is popup content; convert to bool
-        style.clickable = !!popupContent;
-
-        // Set the style
-        evt.layer.setStyle(style);
-        // Cache the properties, for testing
-        evt.layer.setStyle({properties: evt.properties});
-        // Handle radius for CircleMarkers
-        if (evt.layer.setRadius && style.radius) {
-          evt.layer.setRadius(style.radius);
-        }
-
-        // Init the popup
-        if (popupContent) {
-          evt.layer.bindPopup(popupContent);
-        }
-
-        self.render();
-      });
-
-      self.getGeoJson(self.model.get('url'), function(geoJson) {
+      self.getGeoJson(url, function(geoJson) {
         if (geoJson) {
-          self.layer.addGeoJSON(geoJson);
+          self.layer = L.geoJson(geoJson, {
+            pointToLayer: function (feature, latlng) {
+              return new L.CircleMarker(latlng);
+            },
+            onEachFeature: function(feature, layer) {
+              var style = self.getStyleRule(feature.properties),
+                  popupContent = self.getPopupContent(feature.properties);
+
+              // Only clickable if there is popup content; convert to bool
+              style.clickable = !!popupContent;
+
+              // Set the style manually since so I can use popupContent to set clickable
+              layer.setStyle(style);
+
+              // Handle radius for circle marker
+              if (layer.setRadius && style.radius) {
+                layer.setRadius(style.radius);
+              }
+
+              // Init the popup
+              if (popupContent) {
+                layer.bindPopup(popupContent);
+              }
+            }
+          });
+
+          self.render();
+        } else {
+          console.error('GeoJSON could not be retrieved from: ', url);
         }
       });
 
