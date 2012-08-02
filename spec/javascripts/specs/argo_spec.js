@@ -8,11 +8,16 @@ describe('Argo', function() {
       }
     });
 
-    var options = jQuery.extend(true, {}, Argo.config);
-    options.collection = new Backbone.Collection(options.layers);
+    var options = jQuery.extend(true, {}, Argo.config),
+        collection = new Backbone.Collection(options.layers);
 
-    mapView = new Argo.MapView(options);
-    legendView = new Argo.LegendView(options);
+    mapView = new Argo.MapView({
+      map: options.map,
+      collection: collection
+    });
+    legendView = new Argo.LegendView({
+      collection: collection
+    });
   });
 
 
@@ -36,14 +41,14 @@ describe('Argo', function() {
         expect(_.size(mapView.map._layers)).toBe(1);
       });
 
-      it('should have four LayerViews', function(){
-        expect(_.size(mapView.layers)).toBe(4);
+      it('should have 1 LayerView', function(){
+        expect(_.size(mapView.layers)).toBe(1);
       });
     });
 
     describe('Layer Collection', function() {
-      it('should have four layer models', function() {
-        expect(mapView.collection.length).toBe(4);
+      it('should have 1 layer model', function() {
+        expect(mapView.collection.length).toBe(1);
       });
     });
 
@@ -62,7 +67,7 @@ describe('Argo', function() {
         // Two layers since it's a multiline
         _.each(mapView.layers['transit'].layer._layers, function(layer1) {
           _.each(layer1._layers, function(layer2) {
-              expect(layer2.options.color).toBe(colors[layer2.options.properties.name]);
+              expect(layer2.options.color).toBe(colors['Q29']);
           });
         });
       });
@@ -70,7 +75,7 @@ describe('Argo', function() {
   });
 
   describe('LegendView', function() {
-    var html = '<ul class="argo-legend-list"><li class="argo-legend-item"><div class="argo-legend-desc"><div class="argo-legend-desc-title">Local bus routes</div><div class="argo-legend-desc-content"><p>Local bus routes considered in this project: Q29, Q32, Q33, Q45, Q47, Q49, Q53.</p></div></div><div class="argo-legend-title"><input id="argo-transit" data-layerid="transit" class="argo-legend-checkbox" type="checkbox"><label for="argo-transit">Local bus routes</label></div></li><li class="argo-legend-item"><div class="argo-legend-desc"><div class="argo-legend-desc-title">Traffic speeds</div><div class="argo-legend-desc-content"><p>Average weekday and weekend speeds. The colors indicate the fastest (green) to slowest (red) traffic speeds.</p><p>Average speed, miles per hour<br><img src="http://a841-tfpweb.nyc.gov/jackson-heights/wp-content/themes/tfp/img/speed-legend.png"></p></div></div><div class="argo-legend-title"><input id="argo-trafficspeeds" data-layerid="trafficspeeds" class="argo-legend-checkbox" type="checkbox"><label for="argo-trafficspeeds">Traffic speeds</label></div></li><li class="argo-legend-item"><div class="argo-legend-desc"><div class="argo-legend-desc-title">Street vendors</div><div class="argo-legend-desc-content"><p>Locations of street vendors were surveyed on several weekdays and weekends in Fall 2009.</p></div></div><div class="argo-legend-title"><input id="argo-vendors" data-layerid="vendors" class="argo-legend-checkbox" type="checkbox"><label for="argo-vendors">Street vendors</label></div></li><li class="argo-legend-item"><div class="argo-legend-desc"><div class="argo-legend-desc-title">Crashes</div><div class="argo-legend-desc-content"><p>Reported pedestrian and bicycle crashes within the study area between January 2005 and December 2007. Zoom in to see the number of crashes at each location.</p></div></div><div class="argo-legend-title"><input id="argo-crashes" data-layerid="crashes" class="argo-legend-checkbox" type="checkbox"><label for="argo-crashes">Crashes</label></div></li></ul>';
+    var html = '<ul class="argo-legend-list"><li class="argo-legend-item"><div class="argo-legend-desc"><div class="argo-legend-desc-title">Local bus routes</div><div class="argo-legend-desc-content"><p>Local bus routes considered in this project: Q29, Q32, Q33, Q45, Q47, Q49, Q53.</p></div></div><div class="argo-legend-title"><input id="argo-transit" data-layerid="transit" class="argo-legend-checkbox" type="checkbox"><label for="argo-transit">Local bus routes</label></div></li></ul>';
 
     it('should generate the right html', function() {
       expect(legendView.$el.html()).toBe(html);
