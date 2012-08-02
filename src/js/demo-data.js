@@ -1,10 +1,16 @@
 var Argo = Argo || {};
 
 Argo.demoOptions = {
-  el: '#argo-map',
-  lat: 40.74857,
-  lng: -73.88802,
-  zoom: 15,
+  map: {
+    center: [40.74857, -73.88802],
+    zoom: 15,
+    minZoom: 13,
+    maxZoom: 17,
+    maxBounds: [
+      [40.666, -74.040],
+      [40.830, -73.740]
+    ]
+  },
   layers: [
     {
       id: 'transit',

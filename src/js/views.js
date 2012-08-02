@@ -135,12 +135,11 @@ var Argo = Argo || {};
           i, layerModel,
           baseTileUrl = 'http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png',
           baseTileAttribution = 'Map data &copy; OpenStreetMap contributors, CC-BY-SA <a href="http://mapbox.com/about/maps" target="_blank">Mapbox Terms &amp; Feedback</a>',
-          baseTile = new L.TileLayer(baseTileUrl, {maxZoom: 18, attribution: baseTileAttribution});
+          baseTile = new L.TileLayer(baseTileUrl, {attribution: baseTileAttribution});
 
       // Init the map
-      self.map = new L.Map(self.el);
+      self.map = new L.Map(self.el, self.options.map);
       self.map.addLayer(baseTile);
-      self.map.setView(new L.LatLng(self.options.lat, self.options.lng), self.options.zoom);
 
       // Cache the layers views
       self.layers = {};

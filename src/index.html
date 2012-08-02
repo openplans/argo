@@ -35,9 +35,12 @@
 
     <script>
       var layerCollection = new Backbone.Collection(Argo.demoOptions.layers);
-          Argo.demoOptions.collection = layerCollection;
 
-      var mapView = new Argo.MapView(Argo.demoOptions),
+      var mapView = new Argo.MapView({
+            el: '#argo-map',
+            map: Argo.demoOptions.map,
+            collection: layerCollection
+          }),
           legendView = new Argo.LegendView({
             el: '#argo-legend',
             collection: layerCollection
