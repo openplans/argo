@@ -63,13 +63,13 @@ describe('Argo', function() {
         'Q53': '#8332ac'
       };
 
-      it('should be styled based on its config', function(){
-        // Two layers since it's a multiline
-        _.each(mapView.layers['transit'].layer._layers, function(layer1) {
-          _.each(layer1._layers, function(layer2) {
-              expect(layer2.options.color).toBe(colors['Q29']);
-          });
-        });
+      it('should exist', function(){
+        expect(mapView.layers.transit).toBeDefined();
+      });
+
+      it('should have a style definition', function(){
+        var style = mapView.layers.transit.getStyleRule({name: 'Q29' });
+        expect(style.color).toBe(colors.Q29);
       });
     });
   });

@@ -15,6 +15,7 @@ Argo.config = {
     {
       id: 'transit',
       url: 'transit',
+      type: 'geoserver',
       property: 'name',
       title: 'Local bus routes',
       description: '<p>Local bus routes considered in this project: Q29, Q32, Q33, Q45, Q47, Q49, Q53.</p>',
