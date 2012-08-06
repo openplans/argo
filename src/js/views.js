@@ -43,9 +43,12 @@ var Argo = Argo || {};
   A.LayerView = Backbone.View.extend({
     initialize: function(){
       var self = this,
-          url = self.model.get('url');
+          url = self.model.get('url'),
+          type = self.model.get('type') || 'jsonp',
+          getGeoJsonFunction = type === 'geoserver' ?
+            self.getGeoJsonFromGeoServer : self.getGeoJson;
 
-      self.getGeoJson(url, function(geoJson) {
+      getGeoJsonFunction(url, type, function(geoJson) {
         if (geoJson) {
           self.layer = L.geoJson(geoJson, {
             pointToLayer: function (feature, latlng) {
@@ -82,14 +85,21 @@ var Argo = Argo || {};
       // Rerender on model change
       self.model.bind('change', self.render, self);
     },
-    getGeoJson: function(url, callback) {
+    getGeoJsonFromGeoServer: function(url, type, callback) {
       var callbackName = 'ArgoJsonpCallback_' + $.expando + '_' + $.now();
       // Fetch the GeoJson from GeoServer
-      // TODO: make this not dependent on GeoServer
       $.ajax({
         url: url + '&format_options=callback:' + callbackName,
         dataType: 'jsonp',
         jsonpCallback: callbackName,
+        success: callback
+      });
+    },
+    getGeoJson: function(url, type, callback) {
+      // Fetch the GeoJson using the given type
+      $.ajax({
+        url: url,
+        dataType: type,
         success: callback
       });
     },
