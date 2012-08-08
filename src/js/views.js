@@ -58,20 +58,27 @@ var Argo = Argo || {};
               var style = self.getStyleRule(feature.properties),
                   popupContent = self.getPopupContent(feature.properties);
 
-              // Only clickable if there is popup content; convert to bool
-              style.clickable = !!popupContent;
+              if (style) {
+                // Only clickable if there is popup content; convert to bool
+                style.clickable = !!popupContent;
 
-              // Set the style manually since so I can use popupContent to set clickable
-              layer.setStyle(style);
+                // Set the style manually since so I can use popupContent to set clickable
+                layer.setStyle(style);
 
-              // Handle radius for circle marker
-              if (layer.setRadius && style.radius) {
-                layer.setRadius(style.radius);
-              }
+                // Handle radius for circle marker
+                if (layer.setRadius && style.radius) {
+                  layer.setRadius(style.radius);
+                }
 
-              // Init the popup
-              if (popupContent) {
-                layer.bindPopup(popupContent);
+                // Init the popup
+                if (popupContent) {
+                  layer.bindPopup(popupContent);
+                }
+              } else {
+                layer.setStyle({
+                  fill: false,
+                  stroke: false
+                });
               }
             }
           });
