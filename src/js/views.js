@@ -48,7 +48,7 @@ var Argo = Argo || {};
           getGeoJsonFunction = type === 'geoserver' ?
             self.getGeoJsonFromGeoServer : self.getGeoJson;
 
-      getGeoJsonFunction(url, type, function(geoJson) {
+      getGeoJsonFunction(url, self.model.toJSON(), function(geoJson) {
         if (geoJson) {
           self.layer = L.geoJson(geoJson, {
             pointToLayer: function (feature, latlng) {
@@ -92,8 +92,8 @@ var Argo = Argo || {};
       // Rerender on model change
       self.model.bind('change', self.render, self);
     },
-    getGeoJsonFromGeoServer: function(url, type, callback) {
-      var callbackName = 'ArgoJsonpCallback_' + $.expando + '_' + $.now();
+    getGeoJsonFromGeoServer: function(url, options, callback) {
+      var callbackName = 'ArgoJsonpCallback_' + options.id + '_' + $.expando + '_' + $.now();
       // Fetch the GeoJson from GeoServer
       $.ajax({
         url: url + '&format_options=callback:' + callbackName,
@@ -102,11 +102,11 @@ var Argo = Argo || {};
         success: callback
       });
     },
-    getGeoJson: function(url, type, callback) {
+    getGeoJson: function(url, options, callback) {
       // Fetch the GeoJson using the given type
       $.ajax({
         url: url,
-        dataType: type,
+        dataType: options.type,
         success: callback
       });
     },
