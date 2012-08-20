@@ -71,11 +71,15 @@ describe('Argo', function() {
         var style = mapView.layers.transit.getStyleRule({name: 'Q29' });
         expect(style.color).toBe(colors.Q29);
       });
+
+      it('should be visible by default', function(){
+        expect(mapView.layers.transit.model.get('visible')).toBe(true);
+      });
     });
   });
 
   describe('LegendView', function() {
-    var html = '<ul class="argo-legend-list"><li class="argo-legend-item"><div class="argo-legend-desc"><div class="argo-legend-desc-title">Local bus routes</div><div class="argo-legend-desc-content"><p>Local bus routes considered in this project: Q29, Q32, Q33, Q45, Q47, Q49, Q53.</p></div></div><div class="argo-legend-title"><input id="argo-transit" data-layerid="transit" class="argo-legend-checkbox" type="checkbox"><label for="argo-transit">Local bus routes</label></div></li></ul>';
+    var html = '<ul class="argo-legend-list"><li class="argo-legend-item"><div class="argo-legend-desc"><div class="argo-legend-desc-title">Local bus routes</div><div class="argo-legend-desc-content"><p>Local bus routes considered in this project: Q29, Q32, Q33, Q45, Q47, Q49, Q53.</p></div></div><div class="argo-legend-title"><input id="argo-transit" data-layerid="transit" checked="checked" class="argo-legend-checkbox" type="checkbox"><label for="argo-transit">Local bus routes</label></div></li></ul>';
 
     it('should generate the right html', function() {
       expect(legendView.$el.html()).toBe(html);

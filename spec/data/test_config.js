@@ -20,6 +20,7 @@ Argo.config = {
       title: 'Local bus routes',
       description: '<p>Local bus routes considered in this project: Q29, Q32, Q33, Q45, Q47, Q49, Q53.</p>',
       popupContent: 'This is the {{value}} bus.',
+      visible: true,
       rules: [
         {
           condition: '{{property}} === "Q29"',
