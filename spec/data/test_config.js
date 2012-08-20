@@ -13,6 +13,19 @@ Argo.config = {
   },
   layers: [
     {
+      id: 'studyarea',
+      url: 'studyarea',
+      type: 'geoserver',
+      legend: false,
+      visible: true,
+      rules: [
+        {
+          condition: 'true',
+          style: {color: '#444444', opacity: 0.9, fillOpacity:0.1, weight:1.5}
+        }
+      ]
+    },
+    {
       id: 'transit',
       url: 'transit',
       type: 'geoserver',

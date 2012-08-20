@@ -41,48 +41,58 @@ describe('Argo', function() {
         expect(_.size(mapView.map._layers)).toBe(1);
       });
 
-      it('should have 1 LayerView', function(){
-        expect(_.size(mapView.layers)).toBe(1);
+      it('should have 2 LayerViews', function(){
+        expect(_.size(mapView.layers)).toBe(2);
       });
     });
 
     describe('Layer Collection', function() {
-      it('should have 1 layer model', function() {
-        expect(mapView.collection.length).toBe(1);
+      it('should have 2 layer models', function() {
+        expect(mapView.collection.length).toBe(2);
       });
     });
 
     describe('LayerView', function() {
-      var colors = {
-        'Q29': '#3293fe',
-        'Q32': '#ac5a32',
-        'Q33': '#ff84ff',
-        'Q45': '#d53395',
-        'Q47': '#580faa',
-        'Q49': '#335bff',
-        'Q53': '#8332ac'
-      };
+      describe('transit layer', function(){
+        var colors = {
+          'Q29': '#3293fe',
+          'Q32': '#ac5a32',
+          'Q33': '#ff84ff',
+          'Q45': '#d53395',
+          'Q47': '#580faa',
+          'Q49': '#335bff',
+          'Q53': '#8332ac'
+        };
 
-      it('should exist', function(){
-        expect(mapView.layers.transit).toBeDefined();
+        it('should exist', function(){
+          expect(mapView.layers.transit).toBeDefined();
+        });
+
+        it('should have a style definition', function(){
+          var style = mapView.layers.transit.getStyleRule({name: 'Q29' });
+          expect(style.color).toBe(colors.Q29);
+        });
+
       });
 
-      it('should have a style definition', function(){
-        var style = mapView.layers.transit.getStyleRule({name: 'Q29' });
-        expect(style.color).toBe(colors.Q29);
+      describe('studayarea layer', function(){
+        it('should be visible by default', function(){
+          expect(mapView.layers.studyarea.model.get('visible')).toBe(true);
+        });
+
+        it('should not be in the legend', function(){
+          expect(mapView.layers.studyarea.model.get('legend')).toBe(false);
+        });
+
       });
 
-      it('should be visible by default', function(){
-        expect(mapView.layers.transit.model.get('visible')).toBe(true);
-      });
     });
   });
 
   describe('LegendView', function() {
-    var html = '<ul class="argo-legend-list"><li class="argo-legend-item"><div class="argo-legend-desc"><div class="argo-legend-desc-title">Local bus routes</div><div class="argo-legend-desc-content"><p>Local bus routes considered in this project: Q29, Q32, Q33, Q45, Q47, Q49, Q53.</p></div></div><div class="argo-legend-title"><input id="argo-transit" data-layerid="transit" checked="checked" class="argo-legend-checkbox" type="checkbox"><label for="argo-transit">Local bus routes</label></div></li></ul>';
-
-    it('should generate the right html', function() {
-      expect(legendView.$el.html()).toBe(html);
+    it('should only have the transit layer', function() {
+      expect(legendView.$('li').length).toBe(1);
+      expect(legendView.$('li:first .argo-legend-desc-title').text()).toBe('Local bus routes');
     });
   });
 

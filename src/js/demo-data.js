@@ -13,6 +13,19 @@ Argo.demoOptions = {
   },
   layers: [
     {
+      id: 'studyarea',
+      url: 'http://gsdemo.dev.openplans.org/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=jackson_heights:studyarea&srsName=EPSG:4326&outputFormat=json',
+      type: 'geoserver',
+      legend: false,
+      visible: true,
+      rules: [
+        {
+          condition: 'true',
+          style: {color: '#444444', opacity: 0.9, fillOpacity:0.1, weight:1.5}
+        }
+      ]
+    },
+    {
       id: 'transit',
       url: 'http://gsdemo.dev.openplans.org/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=jackson_heights:transit_linestrings&srsName=EPSG:4326&outputFormat=json',
       type: 'geoserver',
@@ -20,7 +33,6 @@ Argo.demoOptions = {
       title: 'Local bus routes',
       description: '<p>Local bus routes considered in this project: Q29, Q32, Q33, Q45, Q47, Q49, Q53.</p>',
       popupContent: 'This is the {{value}} bus.',
-      visible: true,
       rules: [
         {
           condition: '{{property}} === "Q29"',
