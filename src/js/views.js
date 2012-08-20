@@ -13,13 +13,16 @@ var Argo = Argo || {};
       var $markup = $('<ul class="argo-legend-list"></ul>');
 
       this.collection.each(function(model, i) {
+        var checked = model.get('visible') ? 'checked="checked"' : '';
+
         $markup.append('<li class="argo-legend-item">' +
           '<div class="argo-legend-desc">' +
             '<div class="argo-legend-desc-title">'+model.get('title')+'</div>' +
             '<div class="argo-legend-desc-content">'+model.get('description')+'</div>' +
           '</div>' +
           '<div class="argo-legend-title">' +
-            '<input id="argo-'+model.get('id')+'" data-layerid="'+model.get('id')+'" class="argo-legend-checkbox" type="checkbox"></input>' +
+            '<input id="argo-'+model.get('id')+'" data-layerid="'+model.get('id')+'" ' +
+              checked+' class="argo-legend-checkbox" type="checkbox"></input>' +
             '<label for="argo-'+model.get('id')+'">'+model.get('title')+'</label>' +
           '</div>' +
         '</li>');
