@@ -32,35 +32,34 @@ Argo.config = {
       property: 'name',
       title: 'Local bus routes',
       description: '<p>Local bus routes considered in this project: Q29, Q32, Q33, Q45, Q47, Q49, Q53.</p>',
-      popupContent: 'This is the {{value}} bus.',
-      visible: true,
+      popupContent: 'This is the {{name}} bus.',
       rules: [
         {
-          condition: '{{property}} === "Q29"',
+          condition: '"{{name}}" === "Q29"',
           style: {color: '#3293fe', weight: 2, opacity: 0.9}
         },
         {
-          condition: '{{property}} === "Q32"',
+          condition: '"{{name}}" === "Q32"',
           style: {color: '#ac5a32', weight: 2, opacity: 0.9}
         },
         {
-          condition: '{{property}} === "Q33"',
+          condition: '"{{name}}" === "Q33"',
           style: {color: '#ff84ff', weight: 2, opacity: 0.9}
         },
         {
-          condition: '{{property}} === "Q45"',
+          condition: '"{{name}}" === "Q45"',
           style: {color: '#d53395', weight: 2, opacity: 0.9}
         },
         {
-          condition: '{{property}} === "Q47"',
+          condition: '"{{name}}" === "Q47"',
           style: {color: '#580faa', weight: 2, opacity: 0.9}
         },
         {
-          condition: '{{property}} === "Q49"',
+          condition: '"{{name}}" === "Q49"',
           style: {color: '#335bff', weight: 2, opacity: 0.9}
         },
         {
-          condition: '{{property}} === "Q53"',
+          condition: '"{{name}}" === "Q53"',
           style: {color: '#8332ac', weight: 2, opacity: 0.9}
         }
       ]

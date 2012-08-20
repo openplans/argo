@@ -73,6 +73,12 @@ describe('Argo', function() {
           expect(style.color).toBe(colors.Q29);
         });
 
+        it('should have popup content', function() {
+          var content = mapView.layers.transit.getPopupContent({name: 'Q29' });
+          expect(content).toBe('This is the Q29 bus.');
+
+        });
+
       });
 
       describe('studayarea layer', function(){

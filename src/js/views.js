@@ -1,6 +1,11 @@
 var Argo = Argo || {};
 
 (function(A, $) {
+  // Update _ templates to be like mustache
+  _.templateSettings = {
+    interpolate : /\{\{(.+?)\}\}/g
+  };
+
   // A Legend for all of the layers
   A.LegendView = Backbone.View.extend({
     initialize: function(){
@@ -52,6 +57,11 @@ var Argo = Argo || {};
           type = self.model.get('type') || 'jsonp',
           getGeoJsonFunction = type === 'geoserver' ?
             self.getGeoJsonFromGeoServer : self.getGeoJson;
+
+      // Cache the popup template
+      if (self.model.has('popupContent')) {
+        self.popupTemplate = _.template(self.model.get('popupContent'));
+      }
 
       getGeoJsonFunction(url, self.model.toJSON(), function(geoJson) {
         if (geoJson) {
@@ -119,13 +129,12 @@ var Argo = Argo || {};
     getStyleRule: function(properties) {
       var self = this,
           rules = self.model.get('rules'),
-          propertyRe = /\{\{property\}\}/g,
           i, condition;
 
       for (i=0; i<rules.length; i++) {
         // Replace the template with the property variable, not the value.
         // this is so we don't have to worry about strings vs nums.
-        condition = rules[i].condition.replace(propertyRe, 'properties[self.model.get("property")]');
+        condition = _.template(rules[i].condition)(properties);
 
         // Simpler code plus a trusted source; negligible performance hit
         if (eval(condition)) {
@@ -136,7 +145,7 @@ var Argo = Argo || {};
     },
     // Get the popup content and replace the variable
     getPopupContent: function(properties) {
-      return (this.model.get('popupContent') || '').replace('{{value}}', properties[this.model.get('property')]);
+      return this.popupTemplate ? this.popupTemplate(properties) : null;
     },
     render: function(){
       // Adds or removes the layer based on visibility
