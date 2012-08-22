@@ -108,7 +108,10 @@ var Argo = Argo || {};
       self.model.bind('change', self.render, self);
     },
     getGeoJsonFromGeoServer: function(url, options, callback) {
-      var callbackName = 'ArgoJsonpCallback_' + options.id + '_' + $.expando + '_' + $.now();
+      // Get rid of any invalid characters for a JS var
+      var id = options.id.replace(/[^\w\d]/, ''),
+          callbackName = 'ArgoJsonpCallback_' + id + '_' + $.expando + '_' + $.now();
+
       // Fetch the GeoJson from GeoServer
       $.ajax({
         url: url + '&format_options=callback:' + callbackName,
