@@ -92,6 +92,14 @@ describe('Argo', function() {
 
       });
 
+      describe('geoserver', function(){
+        it('should make a unique, safe jsonp callback name', function(){
+          // Could be any layer, just need the function
+          var callbackName = mapView.layers.transit.getGeoServerCallbackName('this-is not*okay!');
+          expect(callbackName.indexOf('ArgoJsonpCallback_thisisnotokay_')).toBe(0);
+        });
+      });
+
     });
   });
 
