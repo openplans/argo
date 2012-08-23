@@ -174,17 +174,16 @@ var Argo = Argo || {};
     initialize: function() {
       var self = this,
           i, layerModel,
-          // Base layer config is optional
-          baseLayerConfig = self.options.baseLayer || {},
-          // Default to Mapbox Streets
-          baseLayerUrl = baseLayerConfig.url || 'http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png',
-          baseLayerAttr = baseLayerConfig.attribution ||
-            '&copy; OpenStreetMap contributors, CC-BY-SA. <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>';
-          baseTile = new L.TileLayer(baseLayerUrl, {attribution: baseLayerAttr});
+          // Base layer config is optional, default to Mapbox Streets
+          baseLayerConfig = _.extend({
+            url: 'http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png',
+            attribution: '&copy; OpenStreetMap contributors, CC-BY-SA. <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>'
+          }, self.options.baseLayer),
+          baseLayer = new L.TileLayer(baseLayerConfig.url, baseLayerConfig);
 
       // Init the map
       self.map = new L.Map(self.el, self.options.map);
-      self.map.addLayer(baseTile);
+      self.map.addLayer(baseLayer);
       // Remove default prefix
       self.map.attributionControl.setPrefix('');
 
