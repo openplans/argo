@@ -11,6 +11,10 @@ Argo.demoOptions = {
       [40.830, -73.740]
     ]
   },
+  baseLayer: {
+    url: 'http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png',
+    attribution: '&copy; OpenStreetMap contributors, CC-BY-SA. <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>'
+  },
   layers: [
     {
       id: 'studyarea',
