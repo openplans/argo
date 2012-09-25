@@ -63,7 +63,7 @@ var Argo = Argo || {};
         self.popupTemplate = _.template(self.model.get('popupContent'));
       }
 
-      getGeoJsonFunction(url, self.model.toJSON(), function(geoJson) {
+      getGeoJsonFunction.call(this, url, self.model.toJSON(), function(geoJson) {
         if (geoJson) {
           self.layer = L.geoJson(geoJson, {
             pointToLayer: function (feature, latlng) {
@@ -107,8 +107,18 @@ var Argo = Argo || {};
       // Rerender on model change
       self.model.bind('change', self.render, self);
     },
+
+    getGeoServerCallbackName: function(id) {
+      // Get rid of any invalid characters for a JS var
+      var safeId = id.replace(/[^\w\d]/g, ''),
+          callbackName = 'ArgoJsonpCallback_' + safeId + '_' + $.expando + '_' + $.now();
+
+      return callbackName;
+    },
+
     getGeoJsonFromGeoServer: function(url, options, callback) {
-      var callbackName = 'ArgoJsonpCallback_' + options.id + '_' + $.expando + '_' + $.now();
+      var callbackName = this.getGeoServerCallbackName(options.id);
+
       // Fetch the GeoJson from GeoServer
       $.ajax({
         url: url + '&format_options=callback:' + callbackName,
@@ -164,17 +174,23 @@ var Argo = Argo || {};
     initialize: function() {
       var self = this,
           i, layerModel,
-          baseTileUrl = 'http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png',
-          baseTileAttribution = 'Map data &copy; OpenStreetMap contributors, CC-BY-SA <a href="http://mapbox.com/about/maps" target="_blank">Mapbox Terms &amp; Feedback</a>',
-          baseTile = new L.TileLayer(baseTileUrl, {attribution: baseTileAttribution});
+          // Base layer config is optional, default to Mapbox Streets
+          baseLayerConfig = _.extend({
+            url: 'http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png',
+            attribution: '&copy; OpenStreetMap contributors, CC-BY-SA. <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>'
+          }, self.options.baseLayer),
+          baseLayer = new L.TileLayer(baseLayerConfig.url, baseLayerConfig);
 
       // Init the map
       self.map = new L.Map(self.el, self.options.map);
-      self.map.addLayer(baseTile);
+      self.map.addLayer(baseLayer);
+      // Remove default prefix
+      self.map.attributionControl.setPrefix('');
 
       // Cache the layers views
       self.layers = {};
 
+      // Init all of the layers
       this.collection.each(function(model, i) {
         self.layers[model.get('id')] = new A.LayerView({
           map: self.map,
