@@ -18,8 +18,8 @@ Argo.demoOptions = {
   layers: [
     {
       id: 'studyarea',
-      url: 'http://gsdemo.dev.openplans.org/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=jackson_heights:studyarea&srsName=EPSG:4326&outputFormat=json',
-      type: 'geoserver',
+      url: 'data/studyarea.json',
+      type: 'json',
       legend: false,
       visible: true,
       rules: [
@@ -31,8 +31,8 @@ Argo.demoOptions = {
     },
     {
       id: 'transit',
-      url: 'http://gsdemo.dev.openplans.org/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=jackson_heights:transit_linestrings&srsName=EPSG:4326&outputFormat=json',
-      type: 'geoserver',
+      url: 'data/transit.json',
+      type: 'json',
       title: 'Local bus routes',
       description: '<p>Local bus routes considered in this project: Q29, Q32, Q33, Q45, Q47, Q49, Q53.</p>',
       popupContent: 'This is the {{name}} bus.',
@@ -69,8 +69,8 @@ Argo.demoOptions = {
     },
     {
       id: 'trafficspeeds',
-      url: 'http://gsdemo.dev.openplans.org/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=jackson_heights:roads&srsName=EPSG:4326&outputFormat=json',
-      type: 'geoserver',
+      url: 'data/trafficspeeds.json',
+      type: 'json',
       title: 'Traffic speeds',
       description: '<p>Average weekday and weekend speeds. The colors indicate the fastest (green) to slowest (red) traffic speeds.</p><p>Average speed, miles per hour<br><img src="http://a841-tfpweb.nyc.gov/jackson-heights/wp-content/themes/tfp/img/speed-legend.png"></p>',
       popupContent: '{{WDAV}} mph',
@@ -91,8 +91,8 @@ Argo.demoOptions = {
     },
     {
       id: 'vendors',
-      url: 'http://gsdemo.dev.openplans.org/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=jackson_heights:vendors&srsName=EPSG:4326&outputFormat=json',
-      type: 'geoserver',
+      url: 'data/vendors.json',
+      type: 'json',
       title: 'Street vendors',
       description: '<p>Locations of street vendors were surveyed on several weekdays and weekends in Fall 2009.</p>',
       rules: [
@@ -104,8 +104,8 @@ Argo.demoOptions = {
     },
     {
       id: 'crashes',
-      url: 'http://gsdemo.dev.openplans.org/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=jackson_heights:Ped_Crashes&srsName=EPSG:4326&outputFormat=json',
-      type: 'geoserver',
+      url: 'data/crashes.json',
+      type: 'json',
       title: 'Crashes',
       description: '<p>Reported pedestrian and bicycle crashes within the study area between January 2005 and December 2007. Zoom in to see the number of crashes at each location.</p>',
       popupContent: '{{ICOUNT}} crashes',
