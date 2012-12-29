@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Argo Layer Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.ie.css" />
+    <![endif]-->
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <div id="argo-container">
+      <div id="argo-map"></div>
+    </div>
+
+    <!-- Le javascript
+    ================================================== -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet-src.js"></script>
+    <script src="js/leaflet.argo.js"></script>
+    <script src="js/demo-data.js"></script>
+
+    <script>
+      var map = L.map('argo-map', {
+            center: [40.74857, -73.88802],
+            zoom: 15,
+            minZoom: 13,
+            maxZoom: 17,
+            maxBounds: [
+              [40.666, -74.040],
+              [40.830, -73.740]
+            ]
+          }),
+          tileUrl = 'http://{s}.tiles.mapbox.com/v3/atogle.map-vo4oycva/{z}/{x}/{y}.png',
+          tileAttribution = 'Map data &copy; OpenStreetMap contributors, CC-BY-SA <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>',
+          tileLayer = L.tileLayer(tileUrl, {maxZoom: 17, attribution: tileUrl, subdomains: 'abcd'})
+            .addTo(map),
+          i, options;
+
+      for (i=0, len=Argo.demoOptions.layers.length; i < len; i++) {
+        options = Argo.demoOptions.layers[i],
+        L.argo(options.url, options).addTo(map);
+      }
+    </script>
+
+  </body>
+</html>
