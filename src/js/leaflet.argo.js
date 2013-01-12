@@ -37,6 +37,14 @@ L.Argo = L.GeoJSON.extend({
       onEachFeature: this._onEachFeature
     });
 
+    var successHandler = L.Util.bind(function(geojson) {
+          this.addData(geojson);
+          this.fire('loaded', {layer: this});
+        }, this),
+        errorHandler = L.Util.bind(function() {
+          this.fire('error', {layer: this});
+        }, this);
+
     // Init layers
     this._layers = {};
 
@@ -47,10 +55,10 @@ L.Argo = L.GeoJSON.extend({
       // This is a url, go fetch the geojson
       if (this.options.type === 'geoserver') {
         // Handle geoserver specially
-        this._getGeoJsonFromGeoServer(geojson, L.Util.bind(this.addData, this));
+        this._getGeoJsonFromGeoServer(geojson, successHandler, errorHandler);
       } else {
         // Handle regular ajax
-        this._getGeoJson(geojson, L.Util.bind(this.addData, this));
+        this._getGeoJson(geojson, successHandler, errorHandler);
       }
     }
   },
@@ -98,23 +106,25 @@ L.Argo = L.GeoJSON.extend({
     return callbackName;
   },
 
-  _getGeoJsonFromGeoServer: function(url, callback) {
-    var callbackName = this.getGeoServerCallbackName();
+  _getGeoJsonFromGeoServer: function(url, success, error) {
+    var callbackName = this._getGeoServerCallbackName();
 
     // Fetch the GeoJson from GeoServer
     $.ajax({
       url: url + '&format_options=callback:' + callbackName,
       dataType: 'jsonp',
       jsonpCallback: callbackName,
-      success: callback
+      success: success,
+      error: error
     });
   },
-  _getGeoJson: function(url, callback) {
+  _getGeoJson: function(url, success, error) {
     // Fetch the GeoJson using the given type
     $.ajax({
       url: url,
       dataType: this.options.type,
-      success: callback
+      success: success,
+      error: error
     });
   }
 });
